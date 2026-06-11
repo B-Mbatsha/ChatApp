@@ -192,30 +192,20 @@ public class Message {
         e.printStackTrace();
      }
  }
-     public String LongestMessage(){
-         File file = new File("messages.json");
-         if(!file.exists()){
-         return "No stored messages found";
-         }
-         String LongestMessage = "";
-         try{
-         List<String> lines = Files.readAllLines(Paths.get("messages.json"));
-         for(String line : lines){
-             if(!line.trim().isEmpty()){
-                 JSONObject obj =  new JSONObject(line);
-                 String message = obj.getString("message");
-                 
-                 if(message.length()> LongestMessage.length()){
-                  LongestMessage = message;   
-                 }
-             }
-         }
-         
-     }catch(IOException e){
-         e.printStackTrace();
-         
-     }
-    return LongestMessage.isEmpty() ? "No message found" : LongestMessage;    
+public String LongestMessage(){
+    if(sentMessages.isEmpty()){
+        return "No stored messages found";
+    }
+    
+    String longestMessage = "";
+    
+    for(String message : sentMessages){
+        if(message.length() > longestMessage.length()){
+            longestMessage = message;
+        }
+    }
+    
+    return longestMessage.isEmpty() ? "No message found" : longestMessage;
 }
      public String SearchbyMessageID (String MessageID){
         Boolean Found = false;
@@ -273,6 +263,48 @@ public class Message {
                  break;
              } 
          }
+         if(Found){
+            try{
+                File file = new File ("message.json");
+                if(file.exists()){
+                    List<String> lines = Files.readAllLines(Paths.get("message.json"));
+                    List<String> NewData = new ArrayList<>();
+                    for(String Line:lines){
+                        if(!Line.trim().isEmpty()){
+                        JSONObject obj = new JSONObject(Line);
+                        String messageID = obj.optString("messageID","");
+                        String message = obj.optString("message","");
+                        String recipient = obj.optString("recipient","");
+                        
+                        if(messageID.length() >= 2 && !message.trim().isEmpty()){
+                            String [] Words = message.split("\\s");
+                            String FirstWord = Words[0];
+                            String LastWord = Words[Words.length - 1];
+                            String LineHash = (messageID.substring(0,2)+ ":" + FirstWord+ ":" + LastWord).toUpperCase();
+                            
+                            if(!LineHash.equalsIgnoreCase(MessageHash)){
+                              NewData.add(Line);      
+                            }
+                            
+                        }else{
+                            NewData.add(Line);
+                        }
+                            
+                        }
+                        
+                    }
+                    try(FileWriter fw = new FileWriter("message.json", false)){
+                        for(String Line : NewData){
+                            fw.write(Line + System.lineSeparator());
+                        }
+                        
+                    }
+                    
+                }
+            }catch(IOException e){
+                e.printStackTrace();
+            } 
+         }
          return Found ? "Message successfully deleted" :"Hash not Found";
      }
      public String MessageReport(){
@@ -283,8 +315,12 @@ public class Message {
         report.append("Hash: " + messageHashes.get(i)+"\n");
         report.append("Recipient: " + RecipientPhonenumber.get(i)+"\n");
         report.append("Message: " + sentMessages.get(i)+"\n");
+        
     }
-    
+    if (sentMessages.isEmpty()) {
+        report.append("No messages to display.\n");
+        report.append("Send a message first.\n");
+    }
     return report.toString();
      
 }

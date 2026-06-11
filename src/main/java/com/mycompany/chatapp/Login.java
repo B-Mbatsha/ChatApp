@@ -101,7 +101,6 @@ public class Login {
       } catch (IOException e) {
           return "Error saving user :";
       }
-     
      return"User registered successfully";
    }
    

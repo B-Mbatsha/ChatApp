@@ -24,9 +24,10 @@ public class MessageTest {
     Message Message3;
     Message Message4;
     Message Message5;
+    
     @Before
     public void setUp(){
-         Message.sentMessages.clear();
+        Message.sentMessages.clear();
         Message.disregardedMessages.clear();
         Message.storedMessages.clear();
         Message.messageHashes.clear();

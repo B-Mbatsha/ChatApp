@@ -55,7 +55,8 @@ public class Mainapp {
             boolean running = true;
  
             while (running) {
-                System.out.println("================================="+"\n");
+                System.out.println("\n");
+                System.out.println("=================================");
                 System.out.println(message.getNumberOFStoredMessages());
                
                 // Step 2.1: Display the three-option menu
