@@ -1,9 +1,14 @@
 name: Java CI with Maven 
+
 on: 
-push: 
-branches: - main - Part2-SendMessages 
-pull_request: 
-branches: - main 
+  push: 
+    branches: 
+      - main 
+      - Part2-SendMessages 
+      - Part3-StoringMessagesOnArraysAndLoadingMessages
+  pull_request: 
+    branches: 
+      - main 
  
 jobs: 
   build: 
