@@ -77,10 +77,10 @@ public class LoginTest {
     }
     public void testLoginSuccess(){
         //First register user
-        login.registerUser(("kyl_1"), "Ch&&secke99","+27838968976");
+        login.registerUser("kyl_1", "Ch&&sec@ke99","+27838968976");
         
         //Then attempt login with correct details
-        boolean result = login.loginUser("kyl_1", "Ch&&sec@ke99");
+        boolean result = login.loginUser();
         
         assertTrue(result);
             
@@ -90,7 +90,7 @@ public class LoginTest {
         // First register a user
         login.registerUser(("kyl_1"),"Ch&&sec@ke99","+27838968976");
         
-        boolean result = login.loginUser("kyl_1", "Wrong Pass1!");
+        boolean result = login.loginUser();
         
         assertFalse(result);
                 

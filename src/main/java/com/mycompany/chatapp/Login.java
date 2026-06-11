@@ -13,6 +13,7 @@ import java.io.FileWriter;
 /*Class allows code to recognize and handle 
         Specific Input and output errors*/
 import java.io.IOException;
+import java.util.Scanner;
 
 public class Login {
         
@@ -61,7 +62,16 @@ public class Login {
     
     //Validates if a South African is entered
     public boolean checkCellPhoneNumber(String phone){
-     return phone.startsWith("+27") && phone.length() <= 12;
+        Boolean Status;
+         String regex = "^(\\+27|0)[6-8]\\d{8}$";
+         if(phone != null && phone.matches(regex)){
+             Status = true;
+         }else{
+
+          Status = false;
+         
+         }
+          return Status;
     }
     
     //Registers the user by prompting the user to enter thier information 
@@ -96,16 +106,45 @@ public class Login {
    }
    
    //returns username and password if they are the same 
-   public boolean loginUser(String Username, String password){
-       return this.Username.equals(Username) && this.password.equals(password);
+   public boolean loginUser(){
+       Scanner input = new Scanner(System.in);
+       String username;
+       String password;
+       Boolean logged = false;
+       int Tries =0;
+               System.out.println("Enter your username");
+               username = input.nextLine();
+               System.out.println("Enter your password");
+               password = input.nextLine();
+       while (Tries < 2 && !logged){
+           if(username.equals(this.Username)&& password.equals(this.password)){
+               logged = true;
+               returnLoginStatus(logged);
+           }else{
+               logged = false;
+               Tries++;
+               if(Tries < 2){
+                System.out.println("Incorrect username or password please retry");
+               System.out.println("Enter your username");
+               username = input.nextLine();
+               System.out.println("Enter your password");
+               password = input.nextLine();
+                 
+               }else{
+                   System.out.println("Too many failed tries.Access denied");
+               }  
+               
+            }
+        }
+       return logged;   
    }
    
    //Return login status message
    public String returnLoginStatus(boolean sucess){
        if (sucess){
-           return "Welcome" + Username + "back";
+           return "Welcome " + Username + ", it is great to see you again";
        }else{
-           return"Username or password incorrect, please try agian.";
+           return"Username or password incorrect, please try again.";
        }
    }
 }  
